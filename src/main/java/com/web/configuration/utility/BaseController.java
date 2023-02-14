@@ -8,7 +8,6 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -19,8 +18,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseController extends Utilities{
@@ -35,6 +37,26 @@ public class BaseController extends Utilities{
 		prop= util.readConfigFile();
 	}
 
+	AppiumDriver getmobiledriver()
+	{
+		try {
+			if (prop.getProperty("mobile").contentEquals("android"))
+			{
+				DesiredCapabilities capabilities = new DesiredCapabilities();
+				capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
+				capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, "13.0");
+				capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "R5CR30DBFGW");
+				capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UIAutomator2");
+				capabilities.setCapability(MobileCapabilityType.APP, "com.foldhealth.patient");
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}
+		return null;
+		
+	}
 
 	WebDriver getdriver() throws Exception {
 		try {
@@ -180,4 +202,7 @@ public class BaseController extends Utilities{
 		   actions.clickAndHold();  
 		   actions.release().perform(); 
 	}
+
+	
+
 }
