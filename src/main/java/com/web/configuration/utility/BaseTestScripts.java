@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
@@ -23,19 +22,21 @@ import com.relevantcodes.extentreports.LogStatus;
 
 public class BaseTestScripts extends BaseController{
 
-	 Logger log = Logger.getLogger(Log.class.getName());
+	 final private Logger log = Logger.getLogger(BaseTestScripts.class.getName());
+	
 	 protected String testcaseName = null;
 	 protected ExtentReports reports;
 	 protected ExtentTest test;
 	 protected String result = "PASS";
 	 protected String stepName ="";
 	 protected static String testName = null;
-	 public static WebDriver driver = null;
+	 
 	 protected int datasetNum =0;
 	 
 	@BeforeSuite
 	public void createReportFolder()
 	{
+		
 		File newfolder = new File (System.getProperty("user.dir")+"//Execution_report");
 		   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-ddHH-mm-ss");  
 		   LocalDateTime now = LocalDateTime.now();     

@@ -25,7 +25,7 @@ public class login extends BaseTestScripts{
 			assertTrue(login.verifyLoginPageDisplayed(),"Failed to"+stepName);
 			logger();
 			
-			stepName= "Verify login page displays add popup";
+			stepName= "Verify login page displays with add popup";
 			assertTrue(login.veifyPopUpMessageDisplayed(),"Failed to"+stepName);
 			logger();
 			

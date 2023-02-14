@@ -23,7 +23,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 public class MBaseTestScripts extends MBaseController{
 
-	 Logger log = Logger.getLogger(Log.class.getName());
+	 private Logger log = Logger.getLogger(MBaseTestScripts.class.getName());
 	 protected String testcaseName = null;
 	 protected ExtentReports reports;
 	 protected ExtentTest test;
