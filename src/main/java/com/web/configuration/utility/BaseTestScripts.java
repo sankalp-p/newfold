@@ -12,9 +12,11 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -30,9 +32,13 @@ public class BaseTestScripts extends BaseController{
 	 protected String result = "PASS";
 	 protected String stepName ="";
 	 protected static String testName = null;
-	 
+	 public static String jsonfileName = null;
 	 protected int datasetNum =0;
 	 
+	@BeforeClass(alwaysRun = true)
+	public void beforeclass(){
+		 jsonfileName = super.getClass().getSimpleName();
+	}
 	@BeforeSuite
 	public void createReportFolder()
 	{
@@ -169,6 +175,13 @@ public class BaseTestScripts extends BaseController{
 	public void incrementDatasetnum()
 	{
 		datasetNum++;
+	}
+	
+	@DataProvider(name ="getData")
+	public Object [][] getData(Method testMethod) throws Exception
+	{
+		return Utilities.readData(jsonfileName, testMethod.getName());
+		
 	}
 }
 

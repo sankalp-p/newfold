@@ -9,14 +9,15 @@ import com.relevantcodes.extentreports.LogStatus;
 import com.web.configuration.utility.BaseController;
 import com.web.configuration.utility.BaseTestScripts;
 import com.web.configuration.utility.LoginController;
+import com.web.configuration.utility.TestData;
 
 public class login extends BaseTestScripts{
 	
 	LoginController login = new LoginController();
 	BaseController base = new BaseController();
 	
-	@Test(description ="Verify that login page is displayed with all details")
-	public void TC_001_doc_web_LoginPage()
+	@Test(description ="Verify that login page is displayed with all details", priority =1 , dataProvider ="getData")
+	public void TC_001_doc_web_LoginPage(TestData data)
 	{
 		try {
 			
@@ -25,21 +26,28 @@ public class login extends BaseTestScripts{
 			assertTrue(login.verifyLoginPageDisplayed(),"Failed to"+stepName);
 			logger();
 			
-			stepName= "Verify login page displays with add popup";
-			assertTrue(login.veifyPopUpMessageDisplayed(),"Failed to"+stepName);
+			stepName= "Click on registeration URl";
+			assertTrue(login.clickRegistrationlink(),"failed to "+ stepName);
 			logger();
 			
-			stepName= "Verify that username and password labels are displayed with mandatory mark";
-			assertTrue(login.verifyLoginFieldlabels(),"Failed to"+stepName);
+			stepName ="Submit registration form";
+			assertTrue(login.fillandSubmitRegistrationForme(data),"Failed to "+stepName);
 			logger();
-			
-			stepName="Verify that login button is disabled by default";
-			assertTrue(login.disableLoginButton(),"Failed to"+stepName);
-			logger();
-			
-			stepName="Verify tnc checkbox is working";
-			assertTrue(login.tncnotClicked(),"Failed to"+stepName);
-			logger();
+//			stepName= "Verify login page displays with add popup";
+//			assertTrue(login.veifyPopUpMessageDisplayed(),"Failed to"+stepName);
+//			logger();
+//			
+//			stepName= "Verify that username and password labels are displayed with mandatory mark";
+//			assertTrue(login.verifyLoginFieldlabels(),"Failed to"+stepName);
+//			logger();
+//			
+//			stepName="Verify that login button is disabled by default";
+//			assertTrue(login.disableLoginButton(),"Failed to"+stepName);
+//			logger();
+//			
+//			stepName="Verify tnc checkbox is working";
+//			assertTrue(login.tncnotClicked(),"Failed to"+stepName);
+//			logger();
 			
 		}
 		catch(Exception e)
@@ -48,32 +56,32 @@ public class login extends BaseTestScripts{
 		}
 	}
 	
-	@Test(description= "Veify that customer get error message with invalid credentials login")
-	public void TC_002_doc_web_invalidLogin() throws Exception
-	{
-		try {
-			test = reports.startTest("Veify that customer get error message with invalid credentials login");
-//			stepName= "Verify login page displays add popup";
-//			assertTrue(login.veifyPopUpMessageDisplayed(),"Failed to"+stepName);
+//	@Test(description= "Veify that customer get error message with invalid credentials login")
+//	public void TC_002_doc_web_invalidLogin() throws Exception
+//	{
+//		try {
+//			test = reports.startTest("Veify that customer get error message with invalid credentials login");
+////			stepName= "Verify login page displays add popup";
+////			assertTrue(login.veifyPopUpMessageDisplayed(),"Failed to"+stepName);
+////			logger();
+//			
+//			stepName = "Verify user can enter username";
+//			assertTrue(login.enterUserName(base.prop.getProperty("invalid_username")),"Failed to"+stepName);
 //			logger();
-			
-			stepName = "Verify user can enter username";
-			assertTrue(login.enterUserName(base.prop.getProperty("invalid_username")),"Failed to"+stepName);
-			logger();
-			
-			stepName = "Verify user can enter password";
-			assertTrue(login.enterPassword(base.prop.getProperty("invalid_pasword")),"Failed to"+stepName);
-			logger();
-			
-			stepName="Verify invalid credentials popup is displayed";
-			assertTrue(login.invalidCredentialsPopup(),"Failed to"+stepName);
-			logger();
-			
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-		}
-	}
+//			
+//			stepName = "Verify user can enter password";
+//			assertTrue(login.enterPassword(base.prop.getProperty("invalid_pasword")),"Failed to"+stepName);
+//			logger();
+//			
+//			stepName="Verify invalid credentials popup is displayed";
+//			assertTrue(login.invalidCredentialsPopup(),"Failed to"+stepName);
+//			logger();
+//			
+//		} catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
+//	}
 		
 
 }

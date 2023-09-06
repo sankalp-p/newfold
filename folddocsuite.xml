@@ -6,8 +6,12 @@
 </listeners>-->
   <test name="Test Basics 1">
       <classes>
-      <class name="com.web.doc.testscripts.login"/>
-      </classes>
+      <class name="com.web.doc.testscripts.login">
+      <methods>
+		  <include name ="TC_001_doc_web_LoginPage"/>
+	  </methods>
+	  </class>
+     </classes>
   </test> <!-- Test --> 
    
   

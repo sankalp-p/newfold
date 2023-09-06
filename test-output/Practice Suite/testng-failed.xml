@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Practice Suite]" guice-stage="DEVELOPMENT">
+  <test thread-count="5" name="Test Basics 1(failed)">
+    <classes>
+      <class name="com.web.doc.testscripts.login">
+        <methods>
+          <include name="createReportFolder"/>
+          <include name="TC_001_doc_web_LoginPage" invocation-numbers="0"/>
+          <include name="beforeMethod"/>
+          <include name="afterTest"/>
+          <include name="afterSuite"/>
+          <include name="beforeTest"/>
+          <include name="getResult"/>
+          <include name="beforeclass"/>
+        </methods>
+      </class> <!-- com.web.doc.testscripts.login -->
+    </classes>
+  </test> <!-- Test Basics 1(failed) -->
+</suite> <!-- Failed suite [Practice Suite] -->

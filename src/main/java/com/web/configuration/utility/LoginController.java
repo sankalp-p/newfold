@@ -1,11 +1,20 @@
 package com.web.configuration.utility;
 
+import java.util.Properties;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class LoginController  {
-	 BaseController base = new BaseController();
-	 
+public class LoginController extends BaseController {
+	BaseController base = new BaseController();
+	Properties webObject;
+	Properties config;
+	String filename= "loginpage";
+	public LoginController()
+	{
+	 webObject = util.readWebObjectRepoFile(this.filename);
+	 config =util.readConfigFile();
+	}
 	public By username_field = By.id("LoginUserName");
 	public By password_field = By.id("LoginPassword");
 	public By login_page_popup = By.xpath("//div[@aria-label='Close Stonly widget']");
@@ -28,7 +37,7 @@ public class LoginController  {
 
 	{
 		
-		return (base.findElement(username_field).isDisplayed() && base.findElement(password_field).isDisplayed());
+		return (base.findElement(webObject.getProperty("username_field")).isDisplayed() && base.findElement(webObject.getProperty("password_field")).isDisplayed());
 	}
 	
 	public Boolean veifyPopUpMessageDisplayed() throws Exception
@@ -137,4 +146,42 @@ public class LoginController  {
 		return false;
 	
 	}
+
+	public boolean clickRegistrationlink() throws Exception {
+		// TODO Auto-generated method stub
+		try
+		{base.findElement(webObject.getProperty("register_link")).click();
+		return true;
+		}
+		catch(Exception e)		{
+			return false;
+		}
+	}
+
+	
+
+	public boolean fillandSubmitRegistrationForme(TestData data) {
+		// TODO Auto-generated method stub
+		
+		try {
+			base.findElement(webObject.getProperty("firstName_field")).sendKeys(data.getFirstName());
+			base.findElement(webObject.getProperty("lastName_field")).sendKeys(data.getLastName());
+			base.findElement(webObject.getProperty("address_field")).sendKeys(data.getAddress());
+			base.findElement(webObject.getProperty("city_field")).sendKeys(data.getCity());
+			base.findElement(webObject.getProperty("state_field")).sendKeys(data.getState());
+			base.findElement(webObject.getProperty("zipCode_field")).sendKeys(data.getZipCode());
+			base.findElement(webObject.getProperty("phone_field")).sendKeys(data.getPhone());
+			base.findElement(webObject.getProperty("ssn_field")).sendKeys(data.SSN);
+			base.findElement(webObject.getProperty("usernamefield")).sendKeys(data.Username);
+			base.findElement(webObject.getProperty("passwordfield")).sendKeys(data.Password);
+			base.findElement(webObject.getProperty("confirm_field")).sendKeys(data.Password);
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
+		
+	}
+
+	
 }

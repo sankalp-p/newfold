@@ -1,24 +1,17 @@
 package com.web.configuration.utility;
 
+import java.time.Duration;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 public class debug {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		
-		String [] sa = {"san","kalp"};
-		
-		for (String n :sa)
-		{
-			switch(n)
-			{
-			case "san":
-				System.out.println("First half");
-				break;
-			case "kalp":
-				System.out.println("Second half");
-			}
-		}
+		WebDriver driver = null;
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(6));
 
 	}
 

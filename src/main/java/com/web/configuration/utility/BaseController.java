@@ -1,4 +1,4 @@
- package com.web.configuration.utility;
+package com.web.configuration.utility;
 
 
 import java.io.File;
@@ -19,6 +19,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.appium.java_client.AppiumDriver;
@@ -26,7 +27,7 @@ import io.appium.java_client.remote.MobileCapabilityType;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseController extends Utilities{
-	
+
 	public static WebDriver driver;
 	protected Utilities util = new Utilities();
 	public Properties prop;
@@ -52,10 +53,10 @@ public class BaseController extends Utilities{
 		}
 		catch(Exception e)
 		{
-			
+
 		}
 		return null;
-		
+
 	}
 
 	WebDriver getdriver() throws Exception {
@@ -68,14 +69,16 @@ public class BaseController extends Utilities{
 				case "chrome":
 					ChromeOptions chromeOptions = new ChromeOptions();
 					chromeOptions.addArguments("disable-inforbars");
-				    chromeOptions.addArguments("detach");
+					chromeOptions.addArguments("detach");
+					chromeOptions.addArguments("--remote-allow-origins=*");
 					WebDriverManager.chromedriver().setup();
+					//System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"/chromedriver.exe");
 					driver = new ChromeDriver(chromeOptions);
 					driver.manage().window().maximize();
 					driver.navigate().to(prop.getProperty("web_url"));
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 					((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
-					Thread.sleep(10000);
+					
 					break;
 				case "ie":
 					break;
@@ -91,7 +94,7 @@ public class BaseController extends Utilities{
 					driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
 					((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
 				}
-				
+
 			}
 			return driver;
 		}
@@ -100,109 +103,160 @@ public class BaseController extends Utilities{
 			System.out.println ("Unable to create webDriver instance"+e.getMessage());
 		}
 		return driver;
-		
-		
+
+
 	}
-	WebElement findElement (By path) throws Exception{
+
+	WebElement findElement (String path) throws Exception{
+
 		try {
+			String[] combined = path.split("\\|");
+			String loc_type = combined[0];
+			String loc_string = combined[1];
+			WebElement element = null;
 			this.getdriver();
-			
-			if (driver== null)
-				throw new Exception ("WebDriver instance is not created");
-			else
+			//Issues with dependencies try to uncommment below code and run
+			//WebDriverWait wait = new WebDriverWait(driver,Duration.ofSeconds(5,0));
+
+			switch(loc_type.toLowerCase())
 			{
-				WebElement ele = driver.findElement(path);
-				return ele;
+			case "xpath":
+				//wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(loc_string)));
+				element= driver.findElement(By.xpath(loc_string));
+				break;
+				
+			case "id":
+				//wait.until(ExpectedConditions.presenceOfElementLocated(By.id(loc_string)));
+				element= driver.findElement(By.id(loc_string));
+				break;
+				
+			case "name":
+				//wait.until(ExpectedConditions.presenceOfElementLocated(By.name(loc_string)));
+				element= driver.findElement(By.name(loc_string));
+				break;
+				
+			case "css":
+				//wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(loc_string)));
+				element= driver.findElement(By.cssSelector(loc_string));
+				break;
+				
+			case "linktext":
+				//wait.until(ExpectedConditions.presenceOfElementLocated(By.linkText(loc_string)));
+				element= driver.findElement(By.linkText(loc_string));
+				break;
+			
+				
+			}
+			return element;
+		}
+			catch(Exception e)
+			{
+				throw new Exception("Unable to find element due to "+e.toString());
 			}
 		}
-		catch(Exception e) {
-			throw new Exception ("Unable to find element"+ e.getMessage());
+
+
+
+		WebElement findElement (By path) throws Exception{
+			try {
+				this.getdriver();
+
+				if (driver== null)
+					throw new Exception ("WebDriver instance is not created");
+				else
+				{
+					WebElement ele = driver.findElement(path);
+					return ele;
+				}
+			}
+			catch(Exception e) {
+				throw new Exception ("Unable to find element"+ e.getMessage());
+			}
 		}
-	}
 
-	List<WebElement> findElements (By path) throws Exception{ 
+		List<WebElement> findElements (By path) throws Exception{ 
 
-		List<WebElement> eles = null;
+			List<WebElement> eles = null;
 
-		try {
-			eles= driver.findElements(path);
+			try {
+				eles= driver.findElements(path);
 
-			return eles;
+				return eles;
+			}
+			catch(Exception e)
+			{
+				throw new Exception ("Unable to find elements"+ e.getMessage());
+			}
 		}
-		catch(Exception e)
+
+		Boolean isDisplayed(By path) throws Exception
 		{
-			throw new Exception ("Unable to find elements"+ e.getMessage());
+			try {
+				this.getdriver();
+				WebElement ele = driver.findElement(path);
+				return true;
+			} catch (NoSuchElementException e) {
+				return false;
+			}
 		}
-	}
-	
-	Boolean isDisplayed(By path) throws Exception
-	{
-		try {
-			this.getdriver();
-			WebElement ele = driver.findElement(path);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-	}
-	
-	private void updateCommandLineProperty() {
-		// TODO Auto-generated method stub
 
-	}
-	
-	public static  String capture ( String screenShotName) throws Exception{
-		try
+		private void updateCommandLineProperty() {
+			// TODO Auto-generated method stub
+
+		}
+
+		public static  String capture ( String screenShotName) throws Exception{
+			try
+			{
+				TakesScreenshot  t = (TakesScreenshot) driver;
+				File source = t.getScreenshotAs(OutputType.FILE);
+				File logDir = new File(System.getProperty("user.dir")+"//screenshots//");
+				if (!logDir.exists())
+					logDir.mkdir();
+				String destination = System.getProperty("user.dir")+"//screenshot//"+screenShotName+".png";
+				File dest = new File(destination);
+				FileUtils.copyFile(source, dest);
+				return destination;
+
+			}
+			catch (Exception ex)
+			{
+				System.out.println(ex.getMessage());
+			}
+			return null;
+
+		}
+
+		public String logger(String stepname)
 		{
-			TakesScreenshot  t = (TakesScreenshot) driver;
-			File source = t.getScreenshotAs(OutputType.FILE);
-			File logDir = new File(System.getProperty("user.dir")+"//screenshots//");
-			if (!logDir.exists())
-				logDir.mkdir();
-			String destination = System.getProperty("user.dir")+"//screenshot//"+screenShotName+".png";
-			File dest = new File(destination);
-			FileUtils.copyFile(source, dest);
-			return destination;
-			
+			try {
+				return this.capture( stepname);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+
 		}
-		catch (Exception ex)
+
+		public void scrollIntoElement(WebElement element)
 		{
-			System.out.println(ex.getMessage());
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		}
-		return null;
-		
-	}
-	
-	public String logger(String stepname)
-	{
-		try {
-			return this.capture( stepname);
+
+		public void jsClick(WebElement element)
+		{
+			((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 		}
-		catch(Exception e) {
-			e.printStackTrace();
+
+		public void moveToElement(WebElement element)
+		{
+			Actions actions = new Actions(driver);  
+			actions.moveToElement(element); 
+			actions.clickAndHold();  
+			actions.release().perform(); 
 		}
-		return null;
-		
-	}
-	
-	public void scrollIntoElement(WebElement element)
-	{
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-	}
 
-	public void jsClick(WebElement element)
-	{
-		((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
-	}
-	
-	public void moveToElement(WebElement element)
-	{
-		 Actions actions = new Actions(driver);  
-		   actions.moveToElement(element); 
-		   actions.clickAndHold();  
-		   actions.release().perform(); 
-	}
 
-	
 
-}
+	}

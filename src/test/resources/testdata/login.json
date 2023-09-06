@@ -1,0 +1,15 @@
+{
+  "TC_001_doc_web_LoginPage" : [ {
+    "firstName" : "Raj",
+    "lastName" :"Kumar",
+    "Address":"Nagpur",
+    "City":"Nagpur",
+    "State":"Ohio",
+    "ZipCode":"440024",
+    "Phone":"7878787887",
+    "SSN":"987654321",
+    "Username":"Jobhi32",
+    "Password":"ekdotin@4",
+    "confirm":"ekdotin@4"
+  } ]
+}
